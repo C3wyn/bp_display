@@ -1,0 +1,4 @@
+enum OrderAction {
+  NewOrder,
+  UpdateOrder
+}
