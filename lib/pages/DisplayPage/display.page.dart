@@ -11,29 +11,46 @@ class DisplayPage extends StatefulWidget {
 }
 
 class _DisplayPageState extends State<DisplayPage> {
+
+  late OrderService _orderService;
+
   @override
   Widget build(BuildContext context) {
+
+    _orderService = OrderService();
+    _orderService.connectSocket(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Back Point')
       ),
-      body: ValueListenableBuilder<List<Order>>(
-        valueListenable: OrderService.ordersNotifier,
-        builder: (context, orders, child) {
-          if(orders.isEmpty){
-            return const Center(
-              child: Text('No orders yet'),
-            );
-          }
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: ValueListenableBuilder<List<Order>>(
+          valueListenable: OrderService.ordersNotifier,
+          builder: (context, orders, child) {
+            if(!_orderService.connected){
+              return const Center(
+                child: Column(
+                  children: [
+                    CircularProgressIndicator(),
+                    Text('Connecting to server...'),
+                  ],
+                ),
+              );
+            }
+            if(orders.isEmpty && _orderService.connected){
+              return const Center(
+                child: Text('No orders yet'),
+              );
+            }
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
               child: Wrap(
                 children: _buildOrderWidgets(orders),
-              ),
-            )
-          );
-        }
+              )
+            );
+          }
+        ),
       )
     );
   }

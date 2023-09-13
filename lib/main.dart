@@ -3,7 +3,6 @@ import 'package:bp_display/services/OrderService/Order.Service.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
-  OrderService.connectSocket();
   runApp(const MyApp());
 }
 
