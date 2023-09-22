@@ -34,6 +34,17 @@ class Order {
       description: json['description']
     );
   }
+  factory Order.fromJsonWithAtributtes(Map<String, dynamic> json) {
+    return Order(
+      ID: json['id'],
+      items: _convertItems(json['attributes']['items']),
+      deliveryType: _convertDeliveryType(json['attributes']['deliveryType']),
+      status: _convertStatus(json['attributes']['status']),
+      pickUpDate: DateTime.parse(json['attributes']['pickUpDate']),
+      createdAt: DateTime.parse(json['attributes']['createdAt']),
+      description: json['attributes']['description']
+    );
+  }
   
   static List<OrderItem> _convertItems(json) {
     List<OrderItem> items = [];

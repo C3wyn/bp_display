@@ -11,17 +11,17 @@ import 'package:intl/intl.dart';
 
 import '../../models/Order/OrderItem.model.dart';
 
-class OrderWidet extends StatefulWidget {
+class OrderWidget extends StatefulWidget {
 
   Order order;
 
-  OrderWidet({super.key, required this.order});
+  OrderWidget({super.key, required this.order});
 
   @override
-  State<OrderWidet> createState() => _OrderWidetState();
+  State<OrderWidget> createState() => _OrderWidgetState();
 }
 
-class _OrderWidetState extends State<OrderWidet> {
+class _OrderWidgetState extends State<OrderWidget> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -59,6 +59,8 @@ class _OrderWidetState extends State<OrderWidet> {
               const Divider(),
               _buildItems(widget.order.items),
               const Divider(),
+              widget.order.status==OrderStatus.Done?
+              Container():
               FilledButton.icon(
                 icon: const Icon(Icons.check),
                 onPressed: () => _checkOrder(context), 
@@ -131,7 +133,7 @@ class _OrderWidetState extends State<OrderWidet> {
     APIResponse response = await APIService.updateOrder(widget.order);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(response.message.toString())
+        content: Text("Successfully updated order ${widget.order.ID}")
       )
     );
   }

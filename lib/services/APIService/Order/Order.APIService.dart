@@ -10,12 +10,19 @@ class OrderAPIService {
   Future<APIResponse> getOrders() async {
     http.Response response = await http.get(Uri.parse('http://localhost:1337/backpoint/openOrders'));
     List<Order> orders = [];
-    List<dynamic> json = jsonDecode(response.body);
-    for(Map<String, dynamic> order in json) {
-      orders.add(Order.fromJson(order));
+    Map<String, dynamic> json = jsonDecode(response.body);
+    if(json['error']==null) {
+      for(Map<String, dynamic> order in json['data']) {
+        orders.add(Order.fromJson(order));
+      }
     }
+    
 
-    return APIResponse(statusCode: response.statusCode, message: "Successfull", data: orders);    
+    return APIResponse(
+      data: orders,
+      error: json['error'],
+      meta: json['meta']
+    );    
   }
 
   Future<APIResponse> updateOrder(Order order) async {
@@ -26,6 +33,18 @@ class OrderAPIService {
     OrderService.orders.remove(order);
     OrderService.ordersNotifier.value = OrderService.orders;
     OrderService.ordersNotifier.notifyListeners();
-    return APIResponse(statusCode: response.statusCode, message: "Successfull", data: null);
+    return APIResponse(data: null);
+  }
+
+  Future<APIResponse> getOrderHistory({int? index}) async {
+    http.Response response = await http.get(
+      Uri.parse("http://localhost:1337/api/orders?filters[Status][\$eq]=Done&pagination[pageSize]=5&pagination[page]=${index?? 1}&sort=finishedTime:desc")
+    );
+    List<Order> orders = [];
+    Map<String, dynamic> json = jsonDecode(response.body);
+    for(Map<String, dynamic> order in json['data']) {
+      orders.add(Order.fromJsonWithAtributtes(order));
+    }
+    return APIResponse(data: orders, error: json['error'], meta: json['meta']);
   }
 }

@@ -40,6 +40,8 @@ dependencies:
   http: ^1.1.0
   intl: ^0.18.1
   audioplayers: ^5.1.0
+  infinite_scroll_pagination: ^4.0.0
+  json_theme: ^6.2.6+1
 
 dev_dependencies:
   flutter_test:
@@ -64,7 +66,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  #assets:
+  assets:
+    - assets/theme.json
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
