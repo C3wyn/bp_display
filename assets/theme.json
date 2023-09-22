@@ -511,7 +511,7 @@
       "titleLarge": {
         "color": "#dd000000",
         "decoration": "none",
-        "fontFamily": ".AppleSystemUIFont",
+        "fontFamily": "Bebas Neue",
         "inherit": true
       },
       "titleMedium": {

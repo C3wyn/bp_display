@@ -34,7 +34,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('Total Orders: ${_controller.maxOrders}'),
+            child: Text('Anzahl Bestellungen: ${_controller.maxOrders}', style: Theme.of(context).textTheme.displaySmall),
           )
         ],
       ),

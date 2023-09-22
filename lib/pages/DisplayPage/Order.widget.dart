@@ -34,7 +34,7 @@ class _OrderWidgetState extends State<OrderWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(widget.order.ID.toString(), style: Theme.of(context).textTheme.headlineLarge),
+                  Text(widget.order.ID.toString(), style: Theme.of(context).textTheme.displayMedium),
                   _chooseDeliveryTypeIcon(widget.order.deliveryType, context),
                 ],
               ),
@@ -44,14 +44,14 @@ class _OrderWidgetState extends State<OrderWidget> {
                 children: [
                   Row(
                     children: [
-                      const Icon(Icons.inbox),
-                      Text(DateFormat('hh:mm').format(widget.order.createdAt)),
+                      Icon(Icons.inbox, size: Theme.of(context).textTheme.displaySmall?.fontSize),
+                      Text(DateFormat('hh:mm').format(widget.order.createdAt), style: Theme.of(context).textTheme.displaySmall),
                     ],
                   ),
                   Row(
                     children: [
-                      const Icon(Icons.outbox),
-                      Text(DateFormat('hh:mm').format(widget.order.pickUpDate)),
+                      Icon(Icons.outbox, size: Theme.of(context).textTheme.displaySmall?.fontSize),
+                      Text(DateFormat('hh:mm').format(widget.order.pickUpDate), style: Theme.of(context).textTheme.displaySmall),
                     ],
                   )
                 ],
@@ -62,9 +62,9 @@ class _OrderWidgetState extends State<OrderWidget> {
               widget.order.status==OrderStatus.Done?
               Container():
               FilledButton.icon(
-                icon: const Icon(Icons.check),
+                icon: Icon(Icons.check, size: Theme.of(context).textTheme.titleMedium?.fontSize),
                 onPressed: () => _checkOrder(context), 
-                label: const Text('Erledigt')
+                label: Text('Erledigt', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.black))
               )
             ],
           ),
@@ -78,21 +78,18 @@ class _OrderWidgetState extends State<OrderWidget> {
       shrinkWrap: true,
       itemCount: items.length,
       itemBuilder: (context, index) {
-        return Card(
-
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column (
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(items[index].Name, style: Theme.of(context).textTheme.headlineSmall),
-                _buildSelectedIngredients(items[index]),
-                _buildExtras(items[index]),
-              ],
-            ),
-          )
-
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column (
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(items[index].Name, style: Theme.of(context).textTheme.titleLarge),
+              _buildSelectedIngredients(items[index]),
+              _buildExtras(items[index]),
+              index!=items.length-1?const Divider(): Container()
+            ],
+          ),
         );
       }
     );
@@ -107,7 +104,7 @@ class _OrderWidgetState extends State<OrderWidget> {
         );
       }else if(!ingredient.Default && ingredient.Selected){
         widgets.add(
-          Text('MIT ${ingredient.Name}')
+          Text('MIT ${ingredient.Name}', style: Theme.of(context).textTheme.bodyLarge)
         );
       }
     }
@@ -117,10 +114,10 @@ class _OrderWidgetState extends State<OrderWidget> {
   }
 
   Icon _chooseDeliveryTypeIcon(DeliveryType deliveryType, BuildContext context) {
-    var iconStyle = Theme.of(context).textTheme.headlineLarge?.fontSize;
+    var iconStyle = Theme.of(context).textTheme.displayMedium?.fontSize;
     switch(deliveryType) {
       case DeliveryType.TakeAway:
-        return Icon(Icons.delivery_dining, size: iconStyle);
+        return Icon(Icons.delivery_dining, size: iconStyle,);
       case DeliveryType.EatHere:
         return Icon(Icons.storefront, size: iconStyle);
       default:

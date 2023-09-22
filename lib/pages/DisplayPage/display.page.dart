@@ -42,7 +42,7 @@ class _DisplayPageState extends State<DisplayPage> {
             ],
           ),
         ),
-        title: Text('Back Point', style: Theme.of(context).textTheme.titleLarge),
+        title: const Text('Back Point'),
         actions: [
           ValueListenableBuilder(
             valueListenable: _orderService.connectedNotifier, 
