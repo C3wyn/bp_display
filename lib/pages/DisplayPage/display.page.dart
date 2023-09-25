@@ -26,7 +26,9 @@ class _DisplayPageState extends State<DisplayPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Padding(
+        title: const Text('Back Point'),
+        actions: [
+          Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
@@ -42,8 +44,6 @@ class _DisplayPageState extends State<DisplayPage> {
             ],
           ),
         ),
-        title: const Text('Back Point'),
-        actions: [
           ValueListenableBuilder(
             valueListenable: _orderService.connectedNotifier, 
             builder: (context, value, child) {
