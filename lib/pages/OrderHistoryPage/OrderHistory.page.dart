@@ -5,7 +5,6 @@ import 'package:bp_display/pages/OrderHistoryPage/OrderHistory.controller.dart';
 import 'package:bp_display/services/APIService/API.Service.dart';
 import 'package:bp_display/services/OrderService/Order.Service.dart';
 import 'package:flutter/material.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class OrderHistoryPage extends StatefulWidget {
   const OrderHistoryPage({super.key});
