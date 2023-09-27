@@ -38,7 +38,7 @@ class OrderAPIService {
 
   Future<APIResponse> getOrderHistory({int? index}) async {
     http.Response response = await http.get(
-      Uri.parse("http://localhost:1337/api/orders?filters[Status][\$eq]=Done&pagination[pageSize]=5&pagination[page]=${index?? 1}&sort=finishedTime:desc")
+      Uri.parse("http://localhost:1337/api/orders?filters[status][\$eq]=Done&pagination[pageSize]=5&pagination[page]=${index?? 1}&sort=finishedTime:desc")
     );
     List<Order> orders = [];
     Map<String, dynamic> json = jsonDecode(response.body);
