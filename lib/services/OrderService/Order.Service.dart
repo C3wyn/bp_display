@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:bp_display/environment.dart';
 import 'package:bp_display/models/API/APIResponse.model.dart';
 import 'package:bp_display/models/Order/Order.model.dart';
@@ -40,6 +42,17 @@ class OrderService {
   /// Finally, it updates the [ordersNotifier] value with the updated [orders] list.
   void _onOpenOrders(data) async {
     ordersNotifier.value = (await APIService.getOrders()).data;
+
+    try {
+      AssetsAudioPlayer.newPlayer().open(
+        Audio("assets/service_bell.mp3"),
+        autoStart: true,
+        showNotification: true,
+      );
+    } catch (e) {
+      print(e);
+    }
+
     ordersNotifier.notifyListeners();
   }
 
