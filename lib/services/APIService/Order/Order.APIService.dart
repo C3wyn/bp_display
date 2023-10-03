@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bp_display/environment.dart';
 import 'package:bp_display/models/API/APIResponse.model.dart';
 import 'package:bp_display/models/Order/Order.model.dart';
 import 'package:bp_display/models/Order/OrderStatus.enum.dart';
@@ -7,29 +8,29 @@ import 'package:bp_display/services/OrderService/Order.Service.dart';
 import 'package:http/http.dart' as http;
 
 class OrderAPIService {
+  final Map<String, String> headers = {
+    "Content-Type": "application/json",
+  };
+
   Future<APIResponse> getOrders() async {
-    http.Response response = await http.get(Uri.parse('http://localhost:1337/backpoint/openOrders'));
+    http.Response response =
+        await http.get(Uri.parse('${ENVIRONMENT.API_URL}/openOrders'));
     List<Order> orders = [];
-    Map<String, dynamic> json = jsonDecode(response.body);
-    if(json['error']==null) {
-      for(Map<String, dynamic> order in json['data']) {
+    List<dynamic> json = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      for (Map<String, dynamic> order in json) {
         orders.add(Order.fromJson(order));
       }
     }
-    
-
-    return APIResponse(
-      data: orders,
-      error: json['error'],
-      meta: json['meta']
-    );    
+    return APIResponse(statusCode: response.statusCode, data: orders);
   }
 
   Future<APIResponse> updateOrder(Order order) async {
-    http.Response response = await http.put(Uri.parse('http://localhost:1337/backpoint/updateOrder?id=${order.ID}'),
-    body: {
-      'status': OrderStatus.Done.toString().split('.').last
-    });
+    http.Response response = await http.put(
+        Uri.parse('${ENVIRONMENT.API_URL}/updateOrder/${order.ID}'),
+        headers: headers,
+        body: jsonEncode(
+            {'status': OrderStatus.Done.toString().split('.').last}));
     OrderService.orders.remove(order);
     OrderService.ordersNotifier.value = OrderService.orders;
     OrderService.ordersNotifier.notifyListeners();
@@ -38,13 +39,13 @@ class OrderAPIService {
 
   Future<APIResponse> getOrderHistory({int? index}) async {
     http.Response response = await http.get(
-      Uri.parse("http://localhost:1337/api/orders?filters[status][\$eq]=Done&pagination[pageSize]=5&pagination[page]=${index?? 1}&sort=finishedTime:desc")
-    );
+        Uri.parse("${ENVIRONMENT.API_URL}/orderHistory?page=${index ?? 1}"));
     List<Order> orders = [];
-    Map<String, dynamic> json = jsonDecode(response.body);
-    for(Map<String, dynamic> order in json['data']) {
-      orders.add(Order.fromJsonWithAtributtes(order));
+    List<dynamic> json = jsonDecode(response.body);
+    print(json);
+    for (Map<String, dynamic> order in json) {
+      orders.add(Order.fromJson(order));
     }
-    return APIResponse(data: orders, error: json['error'], meta: json['meta']);
+    return APIResponse(data: orders);
   }
 }

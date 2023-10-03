@@ -5,7 +5,8 @@ import 'OrderItem.model.dart';
 import 'OrderStatus.enum.dart';
 
 class Order {
-  int ID;
+  String ID;
+  int orderNumber;
   List<OrderItem> items;
   DeliveryType deliveryType;
   OrderStatus status;
@@ -13,48 +14,37 @@ class Order {
   DateTime createdAt;
   String? description;
 
-  Order({
-    required this.ID,
-    required this.items,
-    required this.deliveryType,
-    required this.status,
-    required this.pickUpDate,
-    required this.createdAt,
-    this.description
-  });
+  Order(
+      {required this.orderNumber,
+      required this.ID,
+      required this.items,
+      required this.deliveryType,
+      required this.status,
+      required this.pickUpDate,
+      required this.createdAt,
+      this.description});
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
-      ID: json['id'],
-      items: _convertItems(json['items']),
-      deliveryType: _convertDeliveryType(json['deliveryType']),
-      status: _convertStatus(json['status']),
-      pickUpDate: DateTime.parse(json['pickUpDate']),
-      createdAt: DateTime.parse(json['createdAt']),
-      description: json['description']
-    );
+        orderNumber: json['orderNumber'],
+        ID: json['_id'],
+        items: _convertItems(json['items']),
+        deliveryType: _convertDeliveryType(json['deliveryType']),
+        status: _convertStatus(json['status']),
+        pickUpDate: DateTime.parse(json['pickUpDate']),
+        createdAt: DateTime.fromMillisecondsSinceEpoch(json['createdAt']),
+        description: json['description']);
   }
-  factory Order.fromJsonWithAtributtes(Map<String, dynamic> json) {
-    return Order(
-      ID: json['id'],
-      items: _convertItems(json['attributes']['items']),
-      deliveryType: _convertDeliveryType(json['attributes']['deliveryType']),
-      status: _convertStatus(json['attributes']['status']),
-      pickUpDate: DateTime.parse(json['attributes']['pickUpDate']),
-      createdAt: DateTime.parse(json['attributes']['createdAt']),
-      description: json['attributes']['description']
-    );
-  }
-  
+
   static List<OrderItem> _convertItems(json) {
     List<OrderItem> items = [];
     List<dynamic> jsonItems = json;
-    for(Map<String, dynamic> item in jsonItems) {
+    for (Map<String, dynamic> item in jsonItems) {
       items.add(OrderItem.fromJson(item));
     }
     return items;
   }
-  
+
   static DeliveryType _convertDeliveryType(json) {
     switch (json) {
       case 'Take Away':
@@ -63,7 +53,7 @@ class Order {
         return DeliveryType.EatHere;
     }
   }
-  
+
   static OrderStatus _convertStatus(json) {
     switch (json) {
       case 'Accepted':
